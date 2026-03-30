@@ -1,0 +1,28 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="p-10">
+  <h1 class="text-2xl font-bold mb-4">后台管理</h1>
+
+  <button onclick="load()" class="bg-blue-600 text-white px-3 py-1">
+    查看留言
+  </button>
+
+  <div id="list" class="mt-5 space-y-2"></div>
+</div>
+
+<script>
+const API = "https://你的Railway地址";
+
+function load() {
+  fetch(API + "/admin/messages")
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById("list").innerHTML =
+        data.map(i => `
+          <div class="bg-white p-3 shadow rounded">
+            <b>${i.name}</b>: ${i.message}
+          </div>
+        `).join("");
+    });
+}
+</script>
