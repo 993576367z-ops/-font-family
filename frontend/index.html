@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Company</title>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- Navbar -->
+<header class="flex justify-between p-5 bg-white shadow">
+  <h1 class="font-bold text-xl">MyCompany</h1>
+  <a href="#contact" class="text-blue-500">联系</a>
+</header>
+
+<!-- Banner -->
+<section class="h-[70vh] flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center">
+  <div>
+    <h1 class="text-5xl font-bold">打造数字化企业解决方案</h1>
+    <p class="mt-4 text-lg">高效 · 稳定 · 专业</p>
+  </div>
+</section>
+
+<!-- 公司介绍 -->
+<section class="p-10 text-center">
+  <h2 class="text-3xl font-bold">关于我们</h2>
+  <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
+    我们提供企业级软件开发、网站建设与数字化解决方案。
+  </p>
+</section>
+
+<!-- 产品 -->
+<section class="p-10 grid grid-cols-1 md:grid-cols-3 gap-6" id="products"></section>
+
+<!-- 联系 -->
+<section id="contact" class="p-10 bg-white">
+  <h2 class="text-2xl font-bold mb-4">联系我们</h2>
+
+  <form id="form" class="space-y-3 max-w-md">
+    <input name="name" placeholder="姓名" class="border p-2 w-full" />
+    <input name="email" placeholder="邮箱" class="border p-2 w-full" />
+    <textarea name="message" placeholder="留言" class="border p-2 w-full"></textarea>
+    <button class="bg-blue-600 text-white px-4 py-2">提交</button>
+  </form>
+</section>
+
+<script>
+const API = "https://你的Railway地址";
+
+/* 产品 */
+fetch(API + "/products")
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById("products").innerHTML =
+      data.map(p => `
+        <div class="bg-white p-5 rounded shadow hover:shadow-lg transition">
+          <h3 class="font-bold text-lg">${p.title}</h3>
+          <p class="text-gray-600">${p.description}</p>
+        </div>
+      `).join("");
+  });
+
+/* 留言 */
+document.getElementById("form").onsubmit = async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target));
+
+  await fetch(API + "/contact", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(data)
+  });
+
+  alert("提交成功");
+};
+</script>
+
+</body>
+</html>
